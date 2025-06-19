@@ -8,6 +8,7 @@ import CodeEditor from "../../components/code_editor/code_editor";
 import { useParams } from "react-router-dom";
 import useWebRTC from "../../hooks/useWebRTC";
 import VideoPlayer from "../../components/video_player/video_player";
+import { useWebRTCContext } from "../../utils/webRTC_context";
 
 export default function EditorPage() {
 
@@ -22,14 +23,26 @@ export default function EditorPage() {
     const [panelHeight, setPanelHeight] = useState(30);
     console.log(roomId);
 
+    // const {
+    //     localVideoRef,
+    //     remoteVideoRef,
+    //     screenVideoRef,
+    //     isScreenSharing,
+    //     isRemoteConnected,
+    // } = useWebRTC(roomId);
+
     const {
-        localVideoRef,
-        remoteVideoRef,
-        screenVideoRef,
+        toggleAudio,
+        shareScreen,
+        muted,
         isScreenSharing,
         isRemoteConnected,
-    } = useWebRTC(roomId);
+        joinRoom
+    } = useWebRTCContext();
 
+    useEffect(() => {
+        joinRoom(roomId); // Only call once
+    }, [roomId]);
 
     const getVersion = (lang) => {
         const versions = {
@@ -292,31 +305,31 @@ export default function EditorPage() {
         //     editorRef.current.executeEdits(null, edits);
 
 
-            const handleCodeChange = (data) => {
-                const code = data?.code || data;
-                console.log("[RECEIVED] code-change:", code);
+        const handleCodeChange = (data) => {
+            const code = data?.code || data;
+            console.log("[RECEIVED] code-change:", code);
 
-                if (!code || code.from === socket.id || !editorRef.current) {
-                    console.log("[SKIP] code-change from self or invalid");
-                    return;
-                }
+            if (!code || code.from === socket.id || !editorRef.current) {
+                console.log("[SKIP] code-change from self or invalid");
+                return;
+            }
 
-                const edits = code.changes.map(c => ({
-                    range: new monaco.Range(
-                        c.range.startLineNumber,
-                        c.range.startColumn,
-                        c.range.endLineNumber,
-                        c.range.endColumn
-                    ),
-                    text: c.text,
-                    forceMoveMarkers: true
-                }));
+            const edits = code.changes.map(c => ({
+                range: new monaco.Range(
+                    c.range.startLineNumber,
+                    c.range.startColumn,
+                    c.range.endLineNumber,
+                    c.range.endColumn
+                ),
+                text: c.text,
+                forceMoveMarkers: true
+            }));
 
-                console.log("[APPLY] Executing remote edits:", edits);
+            console.log("[APPLY] Executing remote edits:", edits);
 
-                // Suppress triggering emitter on apply
-                window.setEditorSuppressChange(true);
-                editorRef.current.executeEdits(null, edits);
+            // Suppress triggering emitter on apply
+            window.setEditorSuppressChange(true);
+            editorRef.current.executeEdits(null, edits);
 
         };
 
