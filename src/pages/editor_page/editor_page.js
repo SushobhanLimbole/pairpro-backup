@@ -32,6 +32,9 @@ export default function EditorPage() {
     // } = useWebRTC(roomId);
 
     const {
+        localVideoRef,
+        remoteVideoRef,
+        screenVideoRef,
         toggleAudio,
         shareScreen,
         muted,
@@ -39,6 +42,7 @@ export default function EditorPage() {
         isRemoteConnected,
         joinRoom
     } = useWebRTCContext();
+
 
     useEffect(() => {
         joinRoom(roomId); // Only call once

@@ -178,14 +178,19 @@ export function WebRTCProvider({ children }) {
     }, []);
 
     return (
-        <WebRTCContext.Provider value={{
-            joinRoom,
-            toggleAudio,
-            shareScreen,
-            muted,
-            isScreenSharing,
-            isRemoteConnected
-        }}>
+        <WebRTCContext.Provider
+            value={{
+                joinRoom,
+                toggleAudio,
+                shareScreen,
+                muted,
+                isScreenSharing,
+                isRemoteConnected,
+                localVideoRef,
+                remoteVideoRef,
+                screenVideoRef, // ✅ include these 3 refs
+            }}
+        >
             {children}
         </WebRTCContext.Provider>
     );
