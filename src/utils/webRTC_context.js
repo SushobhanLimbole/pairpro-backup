@@ -177,22 +177,48 @@ export function WebRTCProvider({ children }) {
         };
     }, []);
 
-    // Rebind streams to video refs when they (re)mount
+    // // Rebind streams to video refs when they (re)mount
+    // useEffect(() => {
+    //     if (localVideoRef.current && localStreamRef.current) {
+    //         console.log('[WebRTC] Rebinding local stream to video element');
+    //         localVideoRef.current.srcObject = localStreamRef.current;
+    //     }
+    //     if (remoteVideoRef.current && peerRef.current && peerRef.current.getReceivers) {
+    //         const remoteStreams = remoteVideoRef.current.srcObject;
+    //         console.log('[WebRTC] Rebinding remote stream to video element', remoteStreams);
+    //         // Usually this is already set in peer.ontrack but can force rebind here if needed
+    //     }
+    //     if (screenVideoRef.current && screenStreamRef.current) {
+    //         console.log('[WebRTC] Rebinding screen stream to video element');
+    //         screenVideoRef.current.srcObject = screenStreamRef.current;
+    //     }
+    // }, [localVideoRef.current, remoteVideoRef.current, screenVideoRef.current]);
+
     useEffect(() => {
-        if (localVideoRef.current && localStreamRef.current) {
-            console.log('[WebRTC] Rebinding local stream to video element');
-            localVideoRef.current.srcObject = localStreamRef.current;
-        }
-        if (remoteVideoRef.current && peerRef.current && peerRef.current.getReceivers) {
-            const remoteStreams = remoteVideoRef.current.srcObject;
-            console.log('[WebRTC] Rebinding remote stream to video element', remoteStreams);
-            // Usually this is already set in peer.ontrack but can force rebind here if needed
-        }
-        if (screenVideoRef.current && screenStreamRef.current) {
-            console.log('[WebRTC] Rebinding screen stream to video element');
-            screenVideoRef.current.srcObject = screenStreamRef.current;
-        }
-    }, [localVideoRef.current, remoteVideoRef.current, screenVideoRef.current]);
+        const interval = setInterval(() => {
+            if (localVideoRef.current && localStreamRef.current && !localVideoRef.current.srcObject) {
+                console.log('[WebRTC] Force rebind: local video');
+                localVideoRef.current.srcObject = localStreamRef.current;
+            }
+
+            if (remoteVideoRef.current && remoteVideoRef.current.srcObject === null && peerRef.current) {
+                const receiverStreams = peerRef.current.getReceivers()
+                    .map(r => r.track)
+                    .filter(Boolean);
+
+                const remoteStream = new MediaStream(receiverStreams);
+                console.log('[WebRTC] Force rebind: remote video', remoteStream);
+                remoteVideoRef.current.srcObject = remoteStream;
+            }
+
+            if (screenVideoRef.current && screenStreamRef.current && !screenVideoRef.current.srcObject) {
+                console.log('[WebRTC] Force rebind: screen video');
+                screenVideoRef.current.srcObject = screenStreamRef.current;
+            }
+        }, 1000); // Check every second
+
+        return () => clearInterval(interval);
+    }, []);
 
 
     return (

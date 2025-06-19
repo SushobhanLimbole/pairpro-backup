@@ -111,6 +111,16 @@ export default function VideoPlayer({
     }
   }, []);
 
+  useEffect(() => {
+    return () => {
+      console.log('[VideoPlayer] Unmounting - cleaning up streams');
+      if (localVideoRef.current) localVideoRef.current.srcObject = null;
+      if (remoteVideoRef.current) remoteVideoRef.current.srcObject = null;
+      if (screenVideoRef.current) screenVideoRef.current.srcObject = null;
+    };
+  }, []);
+
+
 
   return (
     <div className={styles.videoContainer}>
@@ -130,10 +140,10 @@ export default function VideoPlayer({
         autoPlay
         playsInline
         className={`${styles.video} ${bothConnected
-            ? styles.remoteFull
-            : screenShareActive
-              ? styles.remoteSmall
-              : styles.remoteHidden
+          ? styles.remoteFull
+          : screenShareActive
+            ? styles.remoteSmall
+            : styles.remoteHidden
           }`}
       />
 
@@ -144,12 +154,12 @@ export default function VideoPlayer({
         playsInline
         muted
         className={`${styles.video} ${screenShareActive
-            ? styles.localHidden
-            : onlyLocal
-              ? styles.localFull
-              : bothConnected
-                ? styles.localSmall
-                : styles.localHidden
+          ? styles.localHidden
+          : onlyLocal
+            ? styles.localFull
+            : bothConnected
+              ? styles.localSmall
+              : styles.localHidden
           }`}
       />
     </div>
