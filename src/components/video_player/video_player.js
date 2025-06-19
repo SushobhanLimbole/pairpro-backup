@@ -1,3 +1,65 @@
+// import styles from "./video_player.module.css";
+
+// export default function VideoPlayer({
+//   localVideoRef,
+//   remoteVideoRef,
+//   screenVideoRef,
+//   isScreenFull,
+//   toggleFullScreen,
+//   isScreenSharing,
+//   isRemoteConnected,
+// }) {
+//   // Determine which video to display based on the connection and screen-sharing state
+//   const onlyLocal = !isRemoteConnected && !isScreenSharing;
+//   const bothConnected = isRemoteConnected && !isScreenSharing;
+//   const screenShareActive = isScreenSharing;
+
+//   return (
+//     <div className={styles.videoContainer}>
+//       {/* Screen Share */}
+//       <video
+//         ref={screenVideoRef}
+//         autoPlay
+//         playsInline
+//         muted
+//         onClick={toggleFullScreen}
+//         className={`${styles.video} ${screenShareActive ? styles.screenActive : styles.screenInactive
+//           }`}
+//       />
+
+//       {/* Remote Video */}
+//       <video
+//         ref={remoteVideoRef}
+//         autoPlay
+//         playsInline
+//         className={`${styles.video} ${bothConnected
+//             ? styles.remoteFull
+//             : screenShareActive
+//               ? styles.remoteSmall
+//               : styles.remoteHidden
+//           }`}
+//       />
+
+//       {/* Local Video */}
+//       <video
+//         ref={localVideoRef}
+//         autoPlay
+//         playsInline
+//         muted
+//         className={`${styles.video} ${screenShareActive
+//             ? styles.localHidden
+//             : onlyLocal
+//               ? styles.localFull
+//               : bothConnected
+//                 ? styles.localSmall
+//                 : styles.localHidden
+//           }`}
+//       />
+//     </div>
+//   );
+// }
+
+import { useEffect } from "react";
 import styles from "./video_player.module.css";
 
 export default function VideoPlayer({
@@ -9,10 +71,22 @@ export default function VideoPlayer({
   isScreenSharing,
   isRemoteConnected,
 }) {
-  // Determine which video to display based on the connection and screen-sharing state
   const onlyLocal = !isRemoteConnected && !isScreenSharing;
   const bothConnected = isRemoteConnected && !isScreenSharing;
   const screenShareActive = isScreenSharing;
+
+  // ✅ Bind existing streams to new video elements
+  useEffect(() => {
+    const refs = [localVideoRef, remoteVideoRef, screenVideoRef];
+    refs.forEach((ref) => {
+      if (ref.current && ref.current.srcObject) {
+        // Force rebind to trigger DOM rendering of video
+        const stream = ref.current.srcObject;
+        ref.current.srcObject = null;
+        ref.current.srcObject = stream;
+      }
+    });
+  }, []);
 
   return (
     <div className={styles.videoContainer}>
@@ -23,8 +97,9 @@ export default function VideoPlayer({
         playsInline
         muted
         onClick={toggleFullScreen}
-        className={`${styles.video} ${screenShareActive ? styles.screenActive : styles.screenInactive
-          }`}
+        className={`${styles.video} ${
+          screenShareActive ? styles.screenActive : styles.screenInactive
+        }`}
       />
 
       {/* Remote Video */}
@@ -32,12 +107,13 @@ export default function VideoPlayer({
         ref={remoteVideoRef}
         autoPlay
         playsInline
-        className={`${styles.video} ${bothConnected
+        className={`${styles.video} ${
+          bothConnected
             ? styles.remoteFull
             : screenShareActive
-              ? styles.remoteSmall
-              : styles.remoteHidden
-          }`}
+            ? styles.remoteSmall
+            : styles.remoteHidden
+        }`}
       />
 
       {/* Local Video */}
@@ -46,14 +122,15 @@ export default function VideoPlayer({
         autoPlay
         playsInline
         muted
-        className={`${styles.video} ${screenShareActive
+        className={`${styles.video} ${
+          screenShareActive
             ? styles.localHidden
             : onlyLocal
-              ? styles.localFull
-              : bothConnected
-                ? styles.localSmall
-                : styles.localHidden
-          }`}
+            ? styles.localFull
+            : bothConnected
+            ? styles.localSmall
+            : styles.localHidden
+        }`}
       />
     </div>
   );
