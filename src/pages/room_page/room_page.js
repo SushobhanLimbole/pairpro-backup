@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import useWebRTC from '../../hooks/useWebRTC';
 import VideoPlayer from '../../components/video_player/video_player';
-import { FaSlideshare, FaPhoneSlash, FaVolumeUp, FaVolumeMute, FaMicrophoneSlash, FaMicrophone, FaEllipsisV } from 'react-icons/fa';
+import { FaSlideshare, FaPhoneSlash, FaMicrophoneSlash, FaMicrophone, FaEllipsisV } from 'react-icons/fa';
 import styles from './room_page.module.css';
 import VideoNavbar from '../../components/video_navbar/video_navbar';
 import { useWebRTCContext } from '../../utils/webRTC_context';
@@ -11,17 +10,6 @@ export default function RoomPage() {
 
   const { roomId } = useParams();
   const navigate = useNavigate();
-
-  // const {
-  //   localVideoRef,
-  //   remoteVideoRef,
-  //   toggleAudio,
-  //   shareScreen,
-  //   muted,
-  //   screenVideoRef,
-  //   isScreenSharing,
-  //   isRemoteConnected,
-  // } = useWebRTC(roomId);
 
   const {
     localVideoRef,
@@ -105,9 +93,6 @@ export default function RoomPage() {
           </button>
 
           <button
-            // style={{
-            //   backgroundColor: menuOpen ? 'rgba(33, 149, 243, 0.77)' : 'gray'
-            // }}
             onClick={() => setMenuOpen(!menuOpen)}
             className={styles.menuButton}
           >

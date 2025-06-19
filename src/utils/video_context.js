@@ -1,5 +1,4 @@
-// src/components/video_context/video_context.js
-import React, { createContext, useContext, useRef, useState } from 'react';
+import { createContext, useContext, useRef, useState } from 'react';
 
 const VideoContext = createContext();
 

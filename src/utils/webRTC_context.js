@@ -1,5 +1,4 @@
-// src/components/webrtc_context/webrtc_context.js
-import React, { createContext, useContext, useRef, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useRef, useState, useEffect, useCallback } from 'react';
 import { socket } from '../socket';
 import { useVideoContext } from './video_context';
 
@@ -208,23 +207,6 @@ export function WebRTCProvider({ children }) {
         };
     }, []);
 
-    // // Rebind streams to video refs when they (re)mount
-    // useEffect(() => {
-    //     if (localVideoRef.current && localStreamRef.current) {
-    //         console.log('[WebRTC] Rebinding local stream to video element');
-    //         localVideoRef.current.srcObject = localStreamRef.current;
-    //     }
-    //     if (remoteVideoRef.current && peerRef.current && peerRef.current.getReceivers) {
-    //         const remoteStreams = remoteVideoRef.current.srcObject;
-    //         console.log('[WebRTC] Rebinding remote stream to video element', remoteStreams);
-    //         // Usually this is already set in peer.ontrack but can force rebind here if needed
-    //     }
-    //     if (screenVideoRef.current && screenStreamRef.current) {
-    //         console.log('[WebRTC] Rebinding screen stream to video element');
-    //         screenVideoRef.current.srcObject = screenStreamRef.current;
-    //     }
-    // }, [localVideoRef.current, remoteVideoRef.current, screenVideoRef.current]);
-
     useEffect(() => {
         const interval = setInterval(() => {
             if (localVideoRef.current && localStreamRef.current && !localVideoRef.current.srcObject) {
@@ -264,7 +246,7 @@ export function WebRTCProvider({ children }) {
                 isRemoteConnected,
                 localVideoRef,
                 remoteVideoRef,
-                screenVideoRef, // ✅ include these 3 refs
+                screenVideoRef, 
             }}
         >
             {children}
