@@ -1,7 +1,7 @@
 // src/components/webrtc_context/webrtc_context.js
 import React, { createContext, useContext, useRef, useState, useEffect, useCallback } from 'react';
-import { useVideoContext } from '../video_context/video_context';
 import { socket } from '../socket';
+import { useVideoContext } from './video_context';
 
 const WebRTCContext = createContext();
 
