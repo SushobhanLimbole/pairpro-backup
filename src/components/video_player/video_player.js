@@ -102,6 +102,16 @@ export default function VideoPlayer({
     });
   }, []);
 
+  useEffect(() => {
+    console.log('[VideoPlayer] Checking stream rebinding');
+    if (localVideoRef.current && localVideoRef.current.srcObject) {
+      console.log('[VideoPlayer] Local video is ready');
+    } else {
+      console.log('[VideoPlayer] Local video not ready or no stream');
+    }
+  }, []);
+
+
   return (
     <div className={styles.videoContainer}>
       {/* Screen Share */}
@@ -119,13 +129,12 @@ export default function VideoPlayer({
         ref={remoteVideoRef}
         autoPlay
         playsInline
-        className={`${styles.video} ${
-          bothConnected
+        className={`${styles.video} ${bothConnected
             ? styles.remoteFull
             : screenShareActive
-            ? styles.remoteSmall
-            : styles.remoteHidden
-        }`}
+              ? styles.remoteSmall
+              : styles.remoteHidden
+          }`}
       />
 
       {/* Local Video */}
@@ -134,15 +143,14 @@ export default function VideoPlayer({
         autoPlay
         playsInline
         muted
-        className={`${styles.video} ${
-          screenShareActive
+        className={`${styles.video} ${screenShareActive
             ? styles.localHidden
             : onlyLocal
-            ? styles.localFull
-            : bothConnected
-            ? styles.localSmall
-            : styles.localHidden
-        }`}
+              ? styles.localFull
+              : bothConnected
+                ? styles.localSmall
+                : styles.localHidden
+          }`}
       />
     </div>
   );
