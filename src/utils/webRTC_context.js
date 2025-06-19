@@ -162,6 +162,37 @@ export function WebRTCProvider({ children }) {
         }
     }, [createPeerConnection]);
 
+    const disconnectCall = useCallback(() => {
+        console.log('[WebRTC] Disconnecting...');
+
+        // Close peer connection
+        if (peerRef.current) {
+            peerRef.current.close();
+            peerRef.current = null;
+        }
+
+        // Stop all media tracks
+        localStreamRef.current?.getTracks().forEach(track => track.stop());
+        screenStreamRef.current?.getTracks().forEach(track => track.stop());
+
+        // Clear video element sources
+        if (localVideoRef.current) localVideoRef.current.srcObject = null;
+        if (remoteVideoRef.current) remoteVideoRef.current.srcObject = null;
+        if (screenVideoRef.current) screenVideoRef.current.srcObject = null;
+
+        // Optionally inform server
+        socket.emit('leave-room');
+
+        // Reset state
+        hasJoinedRoom.current = false;
+        setIsRemoteConnected(false);
+        setIsScreenSharing(false);
+        setMuted(false);
+
+        console.log('[WebRTC] Disconnected and cleaned up');
+    }, []);
+
+
     useEffect(() => {
         return () => {
             console.log('[WebRTCContext] Cleanup');
@@ -229,6 +260,7 @@ export function WebRTCProvider({ children }) {
                 shareScreen,
                 muted,
                 isScreenSharing,
+                disconnectCall,
                 isRemoteConnected,
                 localVideoRef,
                 remoteVideoRef,

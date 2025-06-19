@@ -30,6 +30,7 @@ export default function RoomPage() {
     toggleAudio,
     shareScreen,
     muted,
+    disconnectCall,
     isScreenSharing,
     isRemoteConnected,
     joinRoom
@@ -94,7 +95,10 @@ export default function RoomPage() {
           </button>
 
           <button
-            onClick={() => navigate('/')}
+            onClick={() => {
+              disconnectCall();
+              navigate('/');
+            }}
             className={`${styles.controlButton} ${styles.endCallButton}`}
           >
             <FaPhoneSlash />
