@@ -75,15 +75,29 @@ export default function VideoPlayer({
   const bothConnected = isRemoteConnected && !isScreenSharing;
   const screenShareActive = isScreenSharing;
 
-  // ✅ Bind existing streams to new video elements
   useEffect(() => {
-    const refs = [localVideoRef, remoteVideoRef, screenVideoRef];
-    refs.forEach((ref) => {
-      if (ref.current && ref.current.srcObject) {
-        // Force rebind to trigger DOM rendering of video
+    console.log("[VideoPlayer] Component mounted - checking video refs");
+
+    const refs = [
+      { name: "localVideoRef", ref: localVideoRef },
+      { name: "remoteVideoRef", ref: remoteVideoRef },
+      { name: "screenVideoRef", ref: screenVideoRef },
+    ];
+
+    refs.forEach(({ name, ref }) => {
+      if (ref?.current) {
         const stream = ref.current.srcObject;
-        ref.current.srcObject = null;
-        ref.current.srcObject = stream;
+        console.log(`[VideoPlayer] ${name} DOM node found`);
+
+        if (stream) {
+          console.log(`[VideoPlayer] ${name} already has stream, rebinding...`);
+          ref.current.srcObject = null; // force reset
+          ref.current.srcObject = stream;
+        } else {
+          console.warn(`[VideoPlayer] ${name} has NO stream`);
+        }
+      } else {
+        console.error(`[VideoPlayer] ${name} is NULL`);
       }
     });
   }, []);
@@ -97,9 +111,7 @@ export default function VideoPlayer({
         playsInline
         muted
         onClick={toggleFullScreen}
-        className={`${styles.video} ${
-          screenShareActive ? styles.screenActive : styles.screenInactive
-        }`}
+        className={`${styles.video} ${screenShareActive ? styles.screenActive : styles.screenInactive}`}
       />
 
       {/* Remote Video */}
