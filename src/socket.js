@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const socket = io("https://pairpro-backend-backup.onrender.com", {
+const socket = io("http://localhost:5000", {
   transports: ["websocket"],
   autoConnect: true, // Auto connect once globally
   reconnectionAttempts: 5,

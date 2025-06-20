@@ -58,7 +58,7 @@ export default function RoomPage() {
       <VideoNavbar roomId={roomId} />
 
       {
-        isOpenChat ? <ChatSection handleChat={handleChatSection} /> : <></>
+        isOpenChat ? <ChatSection handleChat={handleChatSection} roomId={roomId} /> : <></>
       }
 
       <div className={styles.container}>
