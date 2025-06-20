@@ -9,30 +9,39 @@ export default function ChatSection({ handleChat, roomId }) {
   const [myId, setMyId] = useState(null);
 
   useEffect(() => {
-    setMyId(socket.id); // Get user's own socket ID
+    console.log('[Chat] Component mounted, joining room:', roomId);
+    setMyId(socket.id);
+    console.log('[Chat] My socket ID:', socket.id);
 
     // 1. Load chat history
     socket.on('chat-history', (history) => {
+      console.log('[Chat] Received chat history:', history);
       const sorted = [...history].sort((a, b) => a.timestamp - b.timestamp);
       setMessages(sorted);
     });
 
-    // 2. Live message receive
+    // 2. Live incoming message
     socket.on('receive-message', (message) => {
+      console.log('[Chat] Incoming message:', message);
       setMessages((prev) => {
         const newMessages = [...prev, message];
-        return newMessages.sort((a, b) => a.timestamp - b.timestamp);
+        const sorted = newMessages.sort((a, b) => a.timestamp - b.timestamp);
+        return sorted;
       });
     });
 
     return () => {
+      console.log('[Chat] Cleaning up socket listeners');
       socket.off('chat-history');
       socket.off('receive-message');
     };
   }, []);
 
   const sendMessage = () => {
-    if (input.trim() === '') return;
+    if (input.trim() === '') {
+      console.warn('[Chat] Tried to send empty message');
+      return;
+    }
 
     const message = {
       text: input,
@@ -40,13 +49,16 @@ export default function ChatSection({ handleChat, roomId }) {
       timestamp: Date.now()
     };
 
-    // Show message immediately in UI
+    console.log('[Chat] Sending message:', message);
+
+    // Show message in UI immediately
     setMessages((prev) => {
       const newMessages = [...prev, message];
-      return newMessages.sort((a, b) => a.timestamp - b.timestamp);
+      const sorted = newMessages.sort((a, b) => a.timestamp - b.timestamp);
+      return sorted;
     });
 
-    // Send to server
+    // Emit to server
     socket.emit('send-message', { roomId, message });
 
     setInput('');
@@ -58,7 +70,10 @@ export default function ChatSection({ handleChat, roomId }) {
         <span>Chat</span>
         <FaTimes
           className={styles.closeIcon}
-          onClick={handleChat}
+          onClick={() => {
+            console.log('[Chat] Closing chat panel');
+            handleChat();
+          }}
           title="Close chat"
         />
       </div>
@@ -66,6 +81,7 @@ export default function ChatSection({ handleChat, roomId }) {
       <div className={styles.messageList}>
         {messages.map((msg, idx) => {
           const isMe = msg.senderId === myId;
+          console.log(`[Chat] Rendering message #${idx} from ${isMe ? 'me' : 'other'}:`, msg);
           return (
             <div
               key={idx}
@@ -81,12 +97,28 @@ export default function ChatSection({ handleChat, roomId }) {
       <div className={styles.inputContainer}>
         <input
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => {
+            console.log('[Chat] Input changed:', e.target.value);
+            setInput(e.target.value);
+          }}
           placeholder="Type a message..."
-          onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              console.log('[Chat] Enter key pressed');
+              sendMessage();
+            }
+          }}
           className={styles.input}
         />
-        <button onClick={sendMessage} className={styles.sendButton}>Send</button>
+        <button
+          onClick={() => {
+            console.log('[Chat] Send button clicked');
+            sendMessage();
+          }}
+          className={styles.sendButton}
+        >
+          Send
+        </button>
       </div>
     </div>
   );
