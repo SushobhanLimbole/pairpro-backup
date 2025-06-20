@@ -13,12 +13,9 @@ export default function ChatSection({ handleChat, roomId }) {
     setMyId(socket.id);
     console.log('[Chat] My socket ID:', socket.id);
 
-    // 1. Load chat history
-    socket.on('chat-history', (history) => {
-      console.log('[Chat] Received chat history:', history);
-      const sorted = [...history].sort((a, b) => a.timestamp - b.timestamp);
-      setMessages(sorted);
-    });
+    // 1. request chat history
+    socket.emit('get-chat-history', { roomId });
+    console.log('[Chat] Requested chat history for room:', roomId);
 
     // 2. Live incoming message
     socket.on('receive-message', (message) => {
