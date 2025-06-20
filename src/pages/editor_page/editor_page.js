@@ -50,8 +50,9 @@ export default function EditorPage() {
     const handleLanguage = (lang) => {
         console.log('handle lang called ', lang);
         setLanguage(lang);
-        socket.emit('language-change', lang);
-    }
+        socket.emit('language-change', { language: lang, roomId });
+    };
+
 
     const handleOutputPanel = (op) => {
         console.log('handle output panel called ', op);
@@ -109,13 +110,16 @@ export default function EditorPage() {
     };
 
     useEffect(() => {
-
-        socket.on('get-language', ( lang ) => {
-            console.log('got language ',lang);
-            handleLanguage(lang);
+        socket.on('get-language', (language) => {
+            console.log('[Language] Language received:', language);
+            setLanguage(language); // or handle accordingly
         });
 
+        return () => {
+            socket.off('get-language');
+        };
     }, []);
+
 
     useEffect(() => {
 
