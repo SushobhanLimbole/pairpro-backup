@@ -161,7 +161,7 @@ export function WebRTCProvider({ children }) {
         }
     }, [createPeerConnection]);
 
-    const disconnectCall = useCallback(() => {
+    const disconnectCall = useCallback((roomId) => {
         console.log('[WebRTC] Disconnecting...');
 
         // Close peer connection
@@ -180,7 +180,7 @@ export function WebRTCProvider({ children }) {
         if (screenVideoRef.current) screenVideoRef.current.srcObject = null;
 
         // Optionally inform server
-        socket.emit('leave-room');
+        socket.emit('leave-room', { roomId });
 
         // Reset state
         hasJoinedRoom.current = false;
