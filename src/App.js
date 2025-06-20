@@ -7,38 +7,10 @@ import RoomPage from './pages/room_page/room_page';
 import { VideoProvider } from "./utils/video_context";
 import { WebRTCProvider } from './utils/webRTC_context';
 
-
-// function App() {
-
-//   return (
-//     <Router>
-//       <VideoProvider>
-//         <Routes>
-//           <Route path="/" Component={HomePage} />
-//           <Route path="/room/:roomId" Component={RoomPage} />
-//           <Route path="/code-editor/:roomId" Component={EditorPage} />
-//         </Routes>
-//       </VideoProvider>
-//     </Router>
-//   );
-// }
-
-
-// function App() {
-//   return (
-//     <Router>
-//       <VideoProvider>
-//         <Routes>
-//           <Route path="/" Component={HomePage} />
-//           <Route path="/room/:roomId" Component={RoomPage} />
-//           <Route path="/code-editor/:roomId" Component={EditorPage} />
-//         </Routes>
-//       </VideoProvider>
-//     </Router>
-//   );
-// }
-
 function App() {
+
+  console.log('App component called');
+
   return (
     <Router>
       <VideoProvider>
