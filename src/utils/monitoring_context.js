@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { socket } from "../socket";
 import { useNavigate } from "react-router-dom";
+import { useWebRTCContext } from "./webRTC_context";
 
 const MonitoringContext = createContext();
 
@@ -10,10 +11,10 @@ export function MonitoringProvider({ children, userId, roomId }) {
   const [tabSwitchCount, setTabSwitchCount] = useState(0);
   const navigate = useNavigate();
   const isCreator = sessionStorage.getItem('isCreator') === 'true';
-
+  const { disconnectCall } = useWebRTCContext();
+  
   useEffect(() => {
-     if (isCreator) return; // ❌ skip monitoring for creator
-
+    if (isCreator) return; // ❌ skip monitoring for creator
     const handleVisibilityChange = () => {
       if (document.visibilityState === "hidden") {
         const updatedCount = tabSwitchCount + 1;
@@ -28,7 +29,7 @@ export function MonitoringProvider({ children, userId, roomId }) {
 
           // Leave meeting
           setTimeout(() => {
-            socket.emit("leave-room", { userId, roomId });
+            disconnectCall(roomId);
             navigate("/"); // Redirect user out of meeting
           }, 3000);
         } else {

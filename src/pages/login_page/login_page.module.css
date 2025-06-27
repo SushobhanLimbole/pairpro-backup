@@ -1,0 +1,180 @@
+.loginPage {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("../../assets/login-bg.png"),
+    linear-gradient(rgba(63, 60, 60, 0.2), rgba(255, 255, 255, 0.5));
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* .loginContainer {
+    background-color: rgba(255, 255, 255, 0.744);
+    padding: 3rem 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    width: 95%;
+    max-width: 500px;
+    text-align: center;
+}
+
+
+.loginContainer .avatar {
+    width: 70px;
+    height: 70px;
+    background-color: #45b6f3;
+    border-radius: 50%;
+    color: white;
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 1.2rem;
+}
+
+.loginContainer h2 {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    color: #333;
+}
+
+.inputField {
+    width: 100%;
+    padding: 1rem 1.2rem;
+    margin: 0.8rem 0;
+    border: none;
+    border-radius: 12px;
+    background-color: #f0f4f8;
+    font-size: 1.2rem;
+    transition: box-shadow 0.3s ease;
+}
+
+.inputField:focus {
+    outline: none;
+    box-shadow: 0 0 8px rgba(69, 182, 243, 0.5);
+}
+
+.loginButton {
+    width: 50%;
+    background-color: #45b6f3;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.loginButton:hover {
+    background-color: #1e90ff;
+    transform: scale(1.03);
+}
+
+@media screen and (max-width: 480px) {
+    .loginContainer {
+        padding: 2rem 1.5rem;
+    }
+
+    .loginContainer h2 {
+        font-size: 1.6rem;
+    }
+
+    .inputField,
+    .loginButton {
+        font-size: 1rem;
+    }
+} */
+
+.loginContainer {
+  background: rgba(255, 255, 255, 0.2); /* Light transparent background */
+  backdrop-filter: blur(12px); /* Blur the background behind */
+  -webkit-backdrop-filter: blur(12px); /* Safari support */
+  padding: 3rem 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  width: 95%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Optional: subtle border for definition */
+}
+
+.loginContainer .avatar {
+  width: 70px;
+  height: 70px;
+  background-color: #45b6f3;
+  border-radius: 50%;
+  color: white;
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.loginContainer h2 {
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  color: #333;
+}
+
+.loginForm {
+    width: 80%;
+}
+
+.inputField {
+  width: 100%;
+  padding: 1rem 1.2rem;
+  margin: 0.8rem 0;
+  border: none;
+  border-radius: 12px;
+  background-color: #f0f4f8;
+  font-size: 1.2rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.inputField:focus {
+  outline: none;
+  box-shadow: 0 0 8px rgba(69, 182, 243, 0.5);
+}
+
+.loginButton {
+  width: 50%;
+  background-color: #45b6f3;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 1.5rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.loginButton:hover {
+  background-color: #1e90ff;
+  transform: scale(1.03);
+}
+
+@media screen and (max-width: 480px) {
+  .loginContainer {
+    padding: 2rem 1.5rem;
+  }
+
+  .loginContainer h2 {
+    font-size: 1.6rem;
+  }
+
+  .inputField,
+  .loginButton {
+    font-size: 1rem;
+  }
+}

@@ -25,6 +25,11 @@ export default function RoomPage() {
     joinRoom
   } = useWebRTCContext();
 
+  useEffect(() => {
+    return () => {
+      sessionStorage.removeItem("isCreator");
+    };
+  }, []);
 
   useEffect(() => {
     joinRoom(roomId); // Only call once
